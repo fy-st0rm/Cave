@@ -14,10 +14,14 @@ class Player:
 		self.player_sprite = spritesheet(os.path.join("res/Sprites/player.png"))
 		self.animator = Animator()
 
+		self.image = self.player_sprite.load_image(4, 0, self.rect.w, self.rect.h)
+
 		self.images = {
 			"idle": {
 				"right":  [self.player_sprite.load_image(4, 0, self.rect.w, self.rect.h)],
-				"left" :  [flip(self.player_sprite.load_image(4, 0, self.rect.w, self.rect.h), True, False)]
+				"left" :  [flip(self.player_sprite.load_image(4, 0, self.rect.w, self.rect.h), True, False)],
+				"up"   :  [self.player_sprite.load_image(2, 0, self.rect.w, self.rect.h)],
+				"down" :  [self.player_sprite.load_image(0, 0, self.rect.w, self.rect.h)]
 			},
 			"walk" : {
 				"right":  self.animator.load_image(self.player_sprite.load_strip([64, 0, self.rect.w, self.rect.h], 2), 1),
@@ -39,6 +43,14 @@ class Player:
 
 		# Movements
 		self.speed = 3
+
+		# Colors
+		self.shirt = (129, 129, 129) # or whatever yellow color you want
+		self.pant = (68, 68, 68)
+		self.threshold = (10, 10, 10) # or whatever threshold works
+		
+		self.blue = (0, 0, 255)
+		self.brown = pygame.Color("brown")
 
 	def event(self, e):
 		if e.type == pygame.KEYDOWN:
@@ -70,27 +82,23 @@ class Player:
 			self.side = "left"
 			movement[0] -= self.speed
 
-		elif self.right:
+		if self.right:
 			self.state = "walk"
 			self.side = "right"
 			movement[0] += self.speed
 
-		elif self.up:
+		if self.up:
 			self.state = "walk"
 			self.side = "up"
 			movement[1] -= self.speed
 
-		elif self.down:
+		if self.down:
 			self.state = "walk"
 			self.side = "down"
 			movement[1] += self.speed
 
-		else:
+		if not self.left and not self.right and not self.up and not self.down:
 			self.state = "idle"
-
-			if self.side == "up" or self.side == "down":
-				sides = ["left", "right"]
-				self.side = random.choice(sides)
 
 		image = self.images[self.state][self.side]
 
@@ -102,5 +110,11 @@ class Player:
 		if self.frame >= len(image):
 			self.frame = 0
 
-		self.surface.blit(image[self.frame], (self.rect.x-scroll[0], self.rect.y-scroll[1]))
+		final_image = image[self.frame]
+
+		# Changing the color
+		pygame.transform.threshold(final_image, final_image, self.shirt, self.threshold, self.blue, 1, None, True)
+		pygame.transform.threshold(final_image, final_image, self.pant, self.threshold, self.brown, 1, None, True)
+
+		self.surface.blit(final_image, (self.rect.x-scroll[0], self.rect.y-scroll[1]))
 
