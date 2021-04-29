@@ -16,6 +16,7 @@ def flip_list(lst, horizontal, vertical):
 
 
 class Animator:
+	# Loads images and sends in a list of images 
 	def load_image(self, images, speed):
 		length = len(images)
 		speed = speed/10
@@ -27,6 +28,7 @@ class Animator:
 		return data_base
 
 	def change_state(self, current_state, new_state, frame):
+		# For changing to the new states
 		if current_state != new_state:
 			current_state = new_state
 			frame = 0

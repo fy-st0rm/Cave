@@ -14,8 +14,7 @@ class Player:
 		self.player_sprite = spritesheet(os.path.join("res/Sprites/player.png"))
 		self.animator = Animator()
 
-		self.image = self.player_sprite.load_image(4, 0, self.rect.w, self.rect.h)
-
+		# Player animation tree
 		self.images = {
 			"idle": {
 				"right":  [self.player_sprite.load_image(4, 0, self.rect.w, self.rect.h)],
@@ -42,7 +41,7 @@ class Player:
 		self.frame = 0
 
 		# Movements
-		self.speed = 3
+		self.speed = 2
 
 		# Colors
 		self.shirt = (129, 129, 129) # or whatever yellow color you want
@@ -53,6 +52,8 @@ class Player:
 		self.brown = pygame.Color("brown")
 
 	def event(self, e):
+		# Player event stuff here:
+
 		if e.type == pygame.KEYDOWN:
 			if e.key == pygame.K_a:
 				self.left = True
@@ -74,7 +75,9 @@ class Player:
 				self.down = False
 
 	def draw(self, scroll):
+		# Player rendering stuff
 
+		# Player movement lst
 		movement = [0, 0]
 
 		if self.left:
