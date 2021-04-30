@@ -3,7 +3,10 @@ import pygame
 from light import *
 from Player import *
 from Map_generator import *
+from Inventory import *
 
+#For the ui_inventory text 
+pygame.font.init()
 
 class Game:
 	def __init__(self):
@@ -12,7 +15,7 @@ class Game:
 		# Some fps stuff
 		self.clock = pygame.time.Clock()
 		self.fps = 60
-		self.font = pygame.font.Font("freesansbold.ttf",32)
+		#self.font = pygame.font.Font("freesansbold.ttf",32)
 
 		# Player
 		self.player = Player(display, pygame.Rect(50, 50, 16, 16))
@@ -26,12 +29,21 @@ class Game:
 		# Light
 		self.light = Light(display)
 
+		# Inventory things
+		self.invent_x = DISPLAY_SIZE[0]/7#Back Ground image locationX
+		self.invent_y = DISPLAY_SIZE[1]/7#Back Ground imgae locattionY
+
+		self.font = pygame.font.Font("res/UI/Font/FFFFORWA.TTF",10)
+
+		self.inventory = Inventory(display, self.font, self.invent_x, self.invent_y)
+
 	def __event(self):
 		# Main game event system
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				self.loop = False
 
+			self.inventory.event(event)
 			self.player.event(event)
 
 	def __display_fps(self):
@@ -54,6 +66,9 @@ class Game:
 		lightY = (self.player.rect.y + (self.player.rect.h/2))-self.scroll[1]
 		self.light.draw([lightX, lightY])
 
+		# Rendering inventory
+		self.inventory.draw()
+
 		self.__display_fps()
 
 
@@ -73,10 +88,14 @@ class Game:
 			self.__renders()
 
 			screen.blit(pygame.transform.scale(display, WIN_SIZE), (0, 0))
+
+			
 			pygame.display.update()
 
 
+
 if __name__ == "__main__":
+
 	pygame.init()
 
 	WIN_SIZE = (800, 600)
@@ -90,3 +109,11 @@ if __name__ == "__main__":
 	game.run()
 
 
+
+
+
+
+
+
+
+		
