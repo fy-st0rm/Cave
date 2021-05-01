@@ -6,11 +6,6 @@ from Map_generator import *
 from Inventory import *
 from Particles import *
 
-#For the ui_inventory text 
-pygame.font.init()
-
-#For the ui_inventory text 
-pygame.font.init()
 
 class Game:
 	def __init__(self):
@@ -41,7 +36,7 @@ class Game:
 
 		self.inventory = Inventory(display, self.font, self.invent_x, self.invent_y)
 		
-		self.Particles = Particles(DISPLAY_SIZE, pygame.Color("Grey"), display) # (Display resolution, Particle Color, Layer)
+		self.particals = Particles(DISPLAY_SIZE, pygame.Color("grey"), display) # (Display resolution, Particle Color, Layer)
 
 	def __event(self):
 		# Main game event system
@@ -77,38 +72,9 @@ class Game:
 		self.inventory.draw()
 
 		# Rendering particles
-		self.Particles.render()
+		self.particals.render()
 
 		self.__display_fps()
-
-		
-
-
-	def __display_fps(self):
-		# Function to show fps
-		fps = self.font.render(str(int(self.clock.get_fps())), True, (255, 255, 255))
-		display.blit(fps, (10, 10))
-
-	def __renders(self):
-		# Everthing to draw here:
-
-		# Rendering map
-		tile_rects = []		# The variable thats stores the hitbox info of walls
-		self.map_generator.generate_terrain(tile_rects, self.scroll)
-		
-		# Rendering player
-		self.player.draw(self.scroll, tile_rects)
-
-		# Rendering light
-		lightX = (self.player.rect.x + (self.player.rect.w/2)) -self.scroll[0]
-		lightY = (self.player.rect.y + (self.player.rect.h/2))-self.scroll[1]
-		self.light.draw([lightX, lightY])
-
-		# Rendering inventory
-		self.inventory.draw()
-
-		self.__display_fps()
-
 
 	def run(self):
 		# Main Game loop:
@@ -126,8 +92,6 @@ class Game:
 			self.__renders()
 
 			screen.blit(pygame.transform.scale(display, WIN_SIZE), (0, 0))
-
-			
 			pygame.display.update()
 
 
