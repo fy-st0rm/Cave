@@ -33,7 +33,7 @@ class Game:
 		self.invent_x = DISPLAY_SIZE[0]/7#Back Ground image locationX
 		self.invent_y = DISPLAY_SIZE[1]/7#Back Ground imgae locattionY
 
-		self.font = pygame.font.Font("res/UI/Font/FFFFORWA.TTF",10)
+		self.font = pygame.font.Font(os.path.join("res/UI/Font/FFFFORWA.TTF"),10)
 
 		self.inventory = Inventory(display, self.font, self.invent_x, self.invent_y)
 
@@ -55,11 +55,11 @@ class Game:
 		# Everthing to draw here:
 
 		# Rendering map
-		tile_rects = []
+		tile_rects = []		# The variable thats stores the hitbox info of walls
 		self.map_generator.generate_terrain(tile_rects, self.scroll)
 		
 		# Rendering player
-		self.player.draw(self.scroll)
+		self.player.draw(self.scroll, tile_rects)
 
 		# Rendering light
 		lightX = (self.player.rect.x + (self.player.rect.w/2)) -self.scroll[0]
@@ -107,13 +107,6 @@ if __name__ == "__main__":
 
 	game = Game()
 	game.run()
-
-
-
-
-
-
-
 
 
 		

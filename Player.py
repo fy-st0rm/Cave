@@ -4,6 +4,7 @@ import random
 
 from SpriteSheet import *
 from Animator import *
+from Collision import *
 
 
 class Player:
@@ -51,6 +52,10 @@ class Player:
 		self.blue = (0, 0, 255)
 		self.brown = pygame.Color("brown")
 
+
+		# Collision stuff
+		self.collision = Collision(self)
+
 	def event(self, e):
 		# Player event stuff here:
 
@@ -74,39 +79,36 @@ class Player:
 			if e.key == pygame.K_s:
 				self.down = False
 
-	def draw(self, scroll):
+	def draw(self, scroll, collision_rect):
 		# Player rendering stuff
 
 		# Player movement lst
-		movement = [0, 0]
+		self.movement = [0, 0]
 
 		if self.left:
 			self.state = "walk"
 			self.side = "left"
-			movement[0] -= self.speed
+			self.movement[0] -= self.speed
 
 		if self.right:
 			self.state = "walk"
 			self.side = "right"
-			movement[0] += self.speed
+			self.movement[0] += self.speed
 
 		if self.up:
 			self.state = "walk"
 			self.side = "up"
-			movement[1] -= self.speed
+			self.movement[1] -= self.speed
 
 		if self.down:
 			self.state = "walk"
 			self.side = "down"
-			movement[1] += self.speed
+			self.movement[1] += self.speed
 
 		if not self.left and not self.right and not self.up and not self.down:
 			self.state = "idle"
 
 		image = self.images[self.state][self.side]
-
-		self.rect.x += movement[0]
-		self.rect.y += movement[1]
 
 		# Increasing the frames
 		self.frame += 1
@@ -118,6 +120,10 @@ class Player:
 		# Changing the color
 		pygame.transform.threshold(final_image, final_image, self.shirt, self.threshold, self.blue, 1, None, True)
 		pygame.transform.threshold(final_image, final_image, self.pant, self.threshold, self.brown, 1, None, True)
+
+
+		# Calculating collisions
+		self.collision.calculate_collision(collision_rect)
 
 		self.surface.blit(final_image, (self.rect.x-scroll[0], self.rect.y-scroll[1]))
 
