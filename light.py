@@ -14,7 +14,7 @@ class Light:
 			pygame.image.load(os.path.join("res/light3.png"))
 		]
 
-		self.l_no = 0
+		self.l_no = 1
 		self.light = self.lights[self.l_no]
 
 		self.lw = self.light.get_width()
