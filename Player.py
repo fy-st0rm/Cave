@@ -52,7 +52,6 @@ class Player:
 		self.blue = (0, 0, 255)
 		self.brown = pygame.Color("brown")
 
-
 		# Collision stuff
 		self.collision = Collision(self)
 
@@ -79,7 +78,32 @@ class Player:
 			if e.key == pygame.K_s:
 				self.down = False
 
-	def draw(self, scroll, collision_rect):
+	def __break(self, collision_rect, game_map):
+		
+		if pygame.mouse.get_pressed()[0]:
+
+			# Checking the side and guessing the block position
+			if self.side == "right":
+				tile = pygame.Rect(self.rect.x+16, self.rect.y, 16, 16)
+			elif self.side == "left":
+				tile = pygame.Rect(self.rect.x-16, self.rect.y, 16, 16)
+			elif self.side == "up":
+				tile = pygame.Rect(self.rect.x, self.rect.y-16, 16, 16)
+			elif self.side == "down":
+				tile = pygame.Rect(self.rect.x, self.rect.y+16, 16, 16)
+
+			# Checking if that block is a collidable block
+			for rect in collision_rect:
+				if tile == rect[0]:
+
+					# If yes getting its corrd and index of game map
+					coord = rect[1]
+					index = rect[2]
+
+					# Changing the value of wall to floor
+					game_map[coord][index][1] = "floor"
+
+	def draw(self, scroll, collision_rect, game_map):
 		# Player rendering stuff
 
 		# Player movement lst
@@ -121,6 +145,9 @@ class Player:
 		pygame.transform.threshold(final_image, final_image, self.shirt, self.threshold, self.blue, 1, None, True)
 		pygame.transform.threshold(final_image, final_image, self.pant, self.threshold, self.brown, 1, None, True)
 
+
+		# For breaking blocks
+		self.__break(collision_rect, game_map)
 
 		# Calculating collisions
 		self.collision.calculate_collision(collision_rect)

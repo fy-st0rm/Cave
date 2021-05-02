@@ -14,7 +14,7 @@ class Game:
 		# Some fps stuff
 		self.clock = pygame.time.Clock()
 		self.fps = 60
-		#self.font = pygame.font.Font("freesansbold.ttf",32)
+		self.font = pygame.font.Font(os.path.join("res/UI/Font/FFFFORWA.TTF"),10)
 
 		# Player
 		self.player = Player(display, pygame.Rect(50, 50, 16, 16))
@@ -32,10 +32,9 @@ class Game:
 		self.invent_x = DISPLAY_SIZE[0]/7#Back Ground image locationX
 		self.invent_y = DISPLAY_SIZE[1]/7#Back Ground imgae locattionY
 
-		self.font = pygame.font.Font(os.path.join("res/UI/Font/FFFFORWA.TTF"),10)
-
 		self.inventory = Inventory(display, self.font, self.invent_x, self.invent_y)
 		
+		# Partical testing
 		self.particals = Particles(DISPLAY_SIZE, pygame.Color("grey"), display) # (Display resolution, Particle Color, Layer)
 
 	def __event(self):
@@ -61,7 +60,7 @@ class Game:
 		self.map_generator.generate_terrain(tile_rects, self.scroll)
 		
 		# Rendering player
-		self.player.draw(self.scroll, tile_rects)
+		self.player.draw(self.scroll, tile_rects, self.map_generator.game_map)
 
 		# Rendering light
 		lightX = (self.player.rect.x + (self.player.rect.w/2)) -self.scroll[0]

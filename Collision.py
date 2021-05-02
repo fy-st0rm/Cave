@@ -7,8 +7,8 @@ class Collision:
 		hit_list = []
 
 		for i in rect2:
-			if rect1.colliderect(i):
-				hit_list.append(i)
+			if rect1.colliderect(i[0]):
+				hit_list.append(i[0])
 
 		return hit_list
 

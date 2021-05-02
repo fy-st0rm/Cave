@@ -13,7 +13,7 @@ class Map:
 		self.sprites = spritesheet(os.path.join("res/Sprites/tiles.png"))
 		self.tile_size = 16
 		self.tiles = {
-			"stone": self.sprites.load_image(3, 0, self.tile_size, self.tile_size),
+			"floor": self.sprites.load_image(3, 0, self.tile_size, self.tile_size),
 			"wall": self.sprites.load_image(2, 0, self.tile_size, self.tile_size)
 		}
 
@@ -42,7 +42,7 @@ class Map:
 
 				# Gives tiles value acc to height
 				if 7 < 8 - height <= 8:
-					self.tileType = "stone"
+					self.tileType = "floor"
 				else:
 					self.tileType = "wall"
 
@@ -65,14 +65,14 @@ class Map:
 
 
 				# Displays the tiles
-				for tile in self.game_map[target_chunk]:
+				for index, tile in enumerate(self.game_map[target_chunk]):
 					self.surface.blit(self.tiles[tile[1]], (tile[0][0] * self.tile_size - scroll[0],
 					                                        tile[0][1] * self.tile_size - scroll[1]))
 
 
 					# storing the tiles hitbox for further collison
 					if tile[1] in ["wall"]:
-						collision_rect.append(pygame.Rect(tile[0][0] * self.tile_size, tile[0][1] * self.tile_size,
-						                                  self.tile_size, self.tile_size))
+						collision_rect.append([pygame.Rect(tile[0][0] * self.tile_size, tile[0][1] * self.tile_size, self.tile_size, self.tile_size), 
+											   target_chunk, index])
 
 
