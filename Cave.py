@@ -4,7 +4,6 @@ from light import *
 from Player import *
 from Map_generator import *
 from Inventory import *
-from Particles import *
 
 
 class Game:
@@ -34,9 +33,6 @@ class Game:
 
 		self.inventory = Inventory(display, self.font, self.invent_x, self.invent_y)
 		
-		# Partical testing
-		self.particals = Particles(DISPLAY_SIZE, pygame.Color("grey"), display) # (Display resolution, Particle Color, Layer)
-
 	def __event(self):
 		# Main game event system
 		for event in pygame.event.get():
@@ -69,9 +65,6 @@ class Game:
 
 		# Rendering inventory
 		self.inventory.draw()
-
-		# Rendering particles
-		self.particals.render()
 
 		self.__display_fps()
 

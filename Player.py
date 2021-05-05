@@ -5,6 +5,7 @@ import random
 from SpriteSheet import *
 from Animator import *
 from Collision import *
+from Particles import *
 
 
 class Player:
@@ -49,11 +50,14 @@ class Player:
 		self.pant = (68, 68, 68)
 		self.threshold = (10, 10, 10) # or whatever threshold works
 		
-		self.blue = (0, 0, 255)
-		self.brown = pygame.Color("brown")
+		self.new_shirt = pygame.Color("cyan")
+		self.new_pant = pygame.Color("brown")
 
 		# Collision stuff
 		self.collision = Collision(self)
+
+
+		self.particles = []
 
 	def event(self, e):
 		# Player event stuff here:
@@ -103,6 +107,8 @@ class Player:
 					# Changing the value of wall to floor
 					game_map[coord][index][1] = "floor"
 
+					self.particles = generate_particles(10, (tile.x, tile.y))
+
 	def draw(self, scroll, collision_rect, game_map):
 		# Player rendering stuff
 
@@ -142,8 +148,8 @@ class Player:
 		final_image = image[self.frame]
 
 		# Changing the color
-		pygame.transform.threshold(final_image, final_image, self.shirt, self.threshold, self.blue, 1, None, True)
-		pygame.transform.threshold(final_image, final_image, self.pant, self.threshold, self.brown, 1, None, True)
+		pygame.transform.threshold(final_image, final_image, self.shirt, self.threshold, self.new_shirt, 1, None, True)
+		pygame.transform.threshold(final_image, final_image, self.pant, self.threshold, self.new_pant, 1, None, True)
 
 
 		# For breaking blocks
@@ -151,6 +157,8 @@ class Player:
 
 		# Calculating collisions
 		self.collision.calculate_collision(collision_rect)
+
+		render_particles(self.surface, self.particles, scroll)
 
 		self.surface.blit(final_image, (self.rect.x-scroll[0], self.rect.y-scroll[1]))
 

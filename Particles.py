@@ -1,21 +1,43 @@
 import pygame, sys, random
 
+
+
+def generate_particles(amt, pos):
+	particles = []
+	for i in range(amt):
+		particles.append([[pos[0], pos[1]],[random.randint(0,20)/10 - 1, -2], random.randint(3,6)])
+	return particles
+
+
+def render_particles(surface, particles, scroll):
+	for Particle in particles:
+		# Particle Properties
+		Particle[0][0] += Particle[1][0]
+		Particle[0][1] += Particle[1][1]
+		Particle[2] -= 0.1
+		Particle[1][1] += .1
+
+		# Draws Circle as Particles
+		pygame.draw.circle(surface, pygame.Color("white"), [int(Particle[0][0]-scroll[0]), int(Particle[0][1]-scroll[1])], int(Particle[2]))
+		if Particle[2] <= 0:
+			particles.remove(Particle) # Removes Particles
+
+
 class Particles(object):
 	
-	def __init__(self, Display_size, color, display):
-		
+	def __init__(self, surface, color):
+		self.surface = surface
+		self.color = color
+
 		#[Location, Velocity, time]
 		self.Particles = []
-		self.Display_size = Display_size
-		self.x = Display_size[0]/2
-		self.y = Display_size[1]/2
-		self.color = color
-		self.display = display
 
+	def generate(self, pos, amt):
+		self.Particles = []
+		for i in range(amt):
+			self.Particles.append([[pos[0], pos[1]],[random.randint(0,20)/10 - 1, -2], random.randint(3,6)])
 
 	def render(self):
-		self.Particles.append([[self.x,self.y],[random.randint(0,20)/10 - 1, -2], random.randint(3,6)])
-
 		for Particle in self.Particles:
 			# Particle Properties
 			Particle[0][0] += Particle[1][0]
@@ -24,6 +46,6 @@ class Particles(object):
 			#Particle[1][1] += 1
 
 			# Draws Circle as Particles
-			pygame.draw.circle(self.display, self.color, [int(Particle[0][0]), int(Particle[0][1])], int(Particle[2]))
+			pygame.draw.circle(self.surface, self.color, [int(Particle[0][0]), int(Particle[0][1])], int(Particle[2]))
 			if Particle[2] <= 0:
 				self.Particles.remove(Particle) # Removes Particles
